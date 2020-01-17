@@ -23,14 +23,44 @@ class AppFixtures extends Fixture
         $role->setLibelle("SUP_ADMIN");
         $manager->persist($role);
         $user = new User();
-        $user->setUsername('admin');
-        $user->setNomcomplet('zeyna');
+        $user->setUsername('supadmin');
+        $user->setNomcomplet('moussa');
         $user->setIsActif('true');
-        $user->setPassword($this->encoder->encodePassword($user, "passer_123"));
+        $user->setPassword($this->encoder->encodePassword($user, "passer"));
         $user->setRoles(["ROLE_".$role->getLibelle()]);
         $manager->persist($role);
         $user->setRole($role);
         $manager->persist($user);
-        $manager->flush();
-    }
+        
+    
+    $role1 = new Role();
+    $role1->setLibelle("ADMIN");
+    $manager->persist($role1);
+    $user1 = new User();
+    $user1->setUsername('admin');
+    $user1->setNomcomplet('ousseynou');
+    $user1->setIsActif('true');
+    $user1->setPassword($this->encoder->encodePassword($user1, "passer_123"));
+    $user1->setRoles(["ROLE_".$role1->getLibelle()]);
+    $manager->persist($role1);
+    $user1->setRole($role1);
+    $manager->persist($user1);
+    
+
+$role2 = new Role();
+$role2->setLibelle("CAISSIER");
+$manager->persist($role2);
+$user2 = new User();
+$user2->setUsername('caissier');
+$user2->setNomcomplet('moussa');
+$user2->setIsActif('true');
+$user2->setPassword($this->encoder->encodePassword($user2, "passer_123"));
+$user2->setRoles(["ROLE_".$role2->getLibelle()]);
+$manager->persist($role2);
+$user2->setRole($role2);
+$manager->persist($user2);
+
+$manager->flush();
+
+}
 }
