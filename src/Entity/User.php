@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -50,6 +52,16 @@ class User implements AdvancedUserInterface
      * @ORM\ManyToOne(targetEntity="App\Entity\Role", inversedBy="users")
      */
     private $role;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Compte", mappedBy="user")
+     */
+    private $comptes;
+
+    public function __construct()
+    {
+        $this->comptes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -175,6 +187,37 @@ class User implements AdvancedUserInterface
     public function IsEnabled()
     {
         return $this->isActif;
+    }
+
+    /**
+     * @return Collection|Compte[]
+     */
+    public function getComptes(): Collection
+    {
+        return $this->comptes;
+    }
+
+    public function addCompte(Compte $compte): self
+    {
+        if (!$this->comptes->contains($compte)) {
+            $this->comptes[] = $compte;
+            $compte->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompte(Compte $compte): self
+    {
+        if ($this->comptes->contains($compte)) {
+            $this->comptes->removeElement($compte);
+            // set the owning side to null (unless already changed)
+            if ($compte->getUser() === $this) {
+                $compte->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 }
